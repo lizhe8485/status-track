@@ -1,0 +1,60 @@
+{% extends 'pmonitor/base.html' %}
+
+{% block content %}
+  <p align="right"> <b>Current Time: </b><span id="cTime"></span></p>
+    <table id="statusTable" style="width:100%;">
+     <caption> <h2> Table of SampleRun Status for ATP Tasks and Functional Parts </h2></caption>
+     <tr>
+       <th> ID </th>
+       <th> SampleRun  </th>
+       <th colspan="2"> Method Generation</th>
+       <th colspan="2"> DAMethod Generation </th>
+       <th colspan="2"> Acquisition </th>
+       <th colspan="2"> FileMover </th>
+       <th colspan="2"> Preprocess </th>
+       <th colspan="2"> DataAnalysis </th>
+       <th colspan="2"> ReportReader </th>
+       <th colspan="2"> CSVGeneration </th>
+       <th colspan="2"> PostProcess   </th>
+       <th> Last Updated </th>
+     </tr>
+     <tr>
+      <th>  </th>
+      <th>  </th>
+      {% for i in range %}
+       <th> Started </th>
+       <th> Finished </th>
+      {% endfor %}
+      </tr>
+      {% if statusDict.statusList %}
+       {% for entry in statusDict.statusList %}
+         <tr class="statusRow">
+           <td> {{ forloop.counter }} </td>
+           {% for status in entry %}
+           {% if "Sample" in status %}
+             <td><a href="">{{ status }}</a></td>
+           {% endif %}
+           {% if "started" in status %}
+             <td style="background-color:green;"></td>
+             <td></td>
+           {% elif "finished" in status %}
+             <td style="background-color:green;"></td>
+             <td style="background-color:green;"></td>
+           {% elif "error" in status %}
+             <td style="background-color:green;"></td>
+             <td style="background-color:red;"></td>
+           {% elif status == "" %}
+             <td></td>
+             <td></td>
+           {% endif %}
+           {% endfor %}
+           <td> HH:MM:SS </td>
+         </tr>
+       {% endfor %}
+      {% else %}
+        <p> No Status data  to Display </p>
+      {% endif %}
+     </table>
+  <a href="{% url 'status_list' %}"><input type="button" onclick="alert('Retrieved New Status!')"  value="Refresh Table!"></a>
+
+{% endblock %}

@@ -1,0 +1,45 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+    <head>
+    <title>ATP Method Selector </title>
+    <link rel="StyleSheet" href="/pmonitor/static/pmonitor/css/mystyles.css" type="text/css">
+
+    <script type="text/javascript" src="{% static '/pmonitor/static/pmonitor/js/myjavascript.js' %}"></script>
+
+    </head>
+
+
+
+ <body onload="startTime()">
+   <div class="row" >
+     <div class="large-12 columns">
+        <h1 align="center"> Welcome to AMP Analytical Method Predictor</h1>
+     </div>
+     <h3 style="text-align:center;">(This webpage will allow <em style="color:red;"> Machine Learning Prediction</em> and more)</h3>
+    <hr>
+   </div>
+
+
+   <div>
+     <ul class="nav">
+       <li><a  href="{% url 'index' %}">Home</a></li>
+       <li><a class="active" href="{% url 'predict' %}">Machine Learning</a></li>
+       <li><a href="#contact">Contact</a></li>
+       <li style="float:right"><a href="#about">About</a></li>
+     </ul>
+   </div> <br>
+   <div>
+     <p align="left"> <b>Current Time: </b><span id="cTime"></span></p>
+     <form name="pcForm" action="{% url 'results' %}" method="POST">
+      <fieldset style="width: 30%">
+       <legend> Physicochemical Properties </legend>
+              {% csrf_token %}
+              {{ form.as_p }}
+      </fieldset>
+      <input type="submit" value="Predict">
+     </form>
+   </div>
+
+ </body>
+</html>

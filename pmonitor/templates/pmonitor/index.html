@@ -1,0 +1,165 @@
+{% if greeting %}
+<!DOCTYPE html>
+<html>
+    <head>
+    <title>ATP Process Monitor </title>
+    <link rel="StyleSheet" href="static/pmonitor/css/mystyles.css" type="text/css">
+
+    <script type="text/javascript" src="static/pmonitor/js/myjavascript.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script>
+       $(document).ready(updateTable());
+        function updateTable(){
+         var tbid=setInterval(getTable, 3000);
+         var tableLength = 0
+         function getTable() {
+             if(tableLength >= 30) {
+                clearInterval(tbid);
+             } else {
+                // tableLength+=10; //commented out because old rows are now removed before update
+                $(".statusRow").remove();
+                $.ajax({
+                   type: "GET",
+                   url: "{% url 'short_status_list' %}",
+                   data: {}
+                })
+           .done(function(response) {
+               $("#statusTable").append(response);
+           })}
+         }
+       }
+    </script>
+
+
+
+
+    </head>
+
+
+
+<body onload="startTime()">
+   <div class="row" >
+     <div class="large-12 columns">
+        <h1 align="center"> Welcome to ATP Home</h1>
+     </div>
+     <h3 style="text-align:center;">(This webpage will display <em style="color:red;"> {{greeting}} </em> and more)</h3>
+   <hr>
+   </div>
+
+
+   <div>
+     <ul class="nav">
+       <li><a class="active" href="{% url 'index' %}">Home</a></li>
+       <li><a href="{% url 'predict' %}">Machine Learning</a></li>
+       <li><a href="#contact">Contact</a></li>
+       <li style="float:right"><a href="#about">About</a></li>
+     </ul>
+   </div>   
+
+<div  id="dynamicmonitor">
+  <p align="right"> <b>Current Time: </b><span id="cTime"></span></p>
+   <div id = "myProgress">
+     <div id = "myBar">
+       <div id = "label"> % progress of importset </div>
+     </div>
+   </div>
+   <button style="float:right" onclick = "move('newstatus')">Refresh Status</button><br>
+   <br>
+   <br>
+   <br>
+   <div id="statustable" class="">
+     <form name="myselection" action="/pmonitor/status_list.html/" method="POST">
+      {% csrf_token %}
+      &nbsp;&nbsp;Look for more SampleRun status:
+      <select name="tableFilter">
+        <option value=""></option>
+        <option value="all" name="all">All Samples</option>
+        <option value="start" name="start">Started</option>
+        <option value="complete" name="complete">Completed</option>
+        <option value="error" name="error">Completed with Error</option>
+      </select>
+      <input type="submit" value="Load">
+      &nbsp;&nbsp;Search a SampleRun by Name:
+      <input type="text" name="searchsample">
+      <input type="submit" value="Search">
+     </form>
+    <table id="statusTable" style="width:100%;">
+     <caption> <h2> Table of SampleRun Status for ATP Tasks and Functional Parts </h2></caption>
+     <tr>
+       <th> ID </th>
+       <th> SampleRun  </th>
+       <th colspan="2"> Method Generation</th>
+       <th colspan="2"> DAMethod Generation </th>
+       <th colspan="2"> Acquisition </th>
+       <th colspan="2"> FileMover </th>
+       <th colspan="2"> Preprocess </th>
+       <th colspan="2"> DataAnalysis </th>
+       <th colspan="2"> ReportReader </th>
+       <th colspan="2"> CSVGeneration </th>
+       <th colspan="2"> PostProcess   </th>
+       <th> Last Updated </th>
+     </tr>
+     <tr>
+      <th>  </th>
+      <th>  </th>
+      {% for i in range %}   
+       <th> Started </th>
+       <th> Finished </th>
+      {% endfor %}
+      <th>(HH:MM:SS, MM/DD/YEAR)</th>
+     </tr>
+    <!-- {% for j in showList %}
+      <tr>
+       <td> {{ forloop.counter}} </td>
+       <td> SampleRun {{ forloop.counter}}  </td>
+       {% for i in range %}
+        <td> </td>
+        <td> </td>
+       {% endfor %}
+       <td>HH:MM:SS, MM/DD/YEAR</td>
+      </tr>
+     {% endfor %}-->
+{% if not status_list %}
+    {% for status in status_list %}
+      <tr>
+        <td> {{ forloop.counter }} </td>
+        <td><a href="{% url 'detail' status.id %}">{{ status.sName }}</a></li>
+        <td> {{status.component}} </td>
+        {% if status.statusCode == 0 %}
+           <td style="color:red"> {{status.statusCode}}</td>
+        {% else %}
+            <td> {{status.statusCode}}</td>
+        {% endif %}
+        <td> {{status.comment}} </td>
+        <td> Nothing yet </td>
+        <td> {{status.created_on}} </td>
+      </tr>
+    {% endfor %}
+{% else %}
+    <!--<p> Nothing to Display </p>-->
+{% endif %}
+    </table>
+  </div>
+  <br>
+<hr>
+</div>
+
+<div id="textinput" >
+  <p> Submit what else you would like us to know!</p>
+  <textarea name="message" rows="10" cols="30">
+  Please input other information you would like us to know in this text box.
+  </textarea>
+  <br>
+  <input type="button" onclick="alert('Content Submitted!')" value="Submit!">
+</div>
+<div align="center" id="footer">
+<h3>
+	Please send feedback and requests to: <a href="mailto:zhe.li5@non.agilent.com?Subject=Feedback%20on%20Process%20Monitor%20" target="_blank" id="in-mail">
+	Zhe Li</a> (4U P7, Santa Clara)
+</h3>
+</div>
+</body>
+</html>
+{% else %}
+   <p> Nothing to Dispay</p>
+{% endif %}

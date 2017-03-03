@@ -1,0 +1,44 @@
+{% if statusDict.greeting %}
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+    <head>
+    <title>ATP Process Monitor </title>
+    <link rel="StyleSheet" href="/pmonitor/static/pmonitor/css/mystyles.css" type="text/css">
+
+    <script type="text/javascript" src="{% static '/pmonitor/static/pmonitor/js/myjavascript.js' %}"></script>
+
+    </head>
+
+
+
+<body onload="startTime()">
+   <div class="row" >
+     <div class="large-12 columns">
+        <h1 align="center"> {{ statusDict.greeting }}</h1>
+     </div>
+     <h3 style="text-align:center;">(This webpage will <em style="color:red;"> {{ statusDict.message }} </em> and more)</h3>
+   <hr>
+   </div>
+
+
+   <div>
+     <ul class="nav">
+       <li><a href="{% url 'index' %}">Home</a></li>
+       <li><a href="{% url 'predict' %}">Machine Learning</a></li>
+       <li><a href="#contact">Contact</a></li>
+       <li style="float:right"><a href="#about">About</a></li>
+     </ul>
+   </div>   
+
+   <div>
+      {% block content %}
+      {% endblock %}
+   </div>
+
+   <hr>
+</body>
+</html>
+{% else %}
+   <p> Sorry, Nothing to Dispay on This Page. Did you greet the base page? </p>
+{% endif %}

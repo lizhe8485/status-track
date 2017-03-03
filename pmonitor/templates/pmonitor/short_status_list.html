@@ -1,0 +1,29 @@
+{% if statusDict.shortstatusList %}
+       {% for entry in statusDict.shortstatusList %}
+         <tr class="statusRow">
+           <td> {{ forloop.counter }} </td>
+           {% for status in entry %}
+           {% if "Sample" in status %}
+             <td><a href="">{{ status }}</a></td>
+           {% endif %}
+           {% if "started" in status %}
+             <td style="background-color:green;"></td>
+             <td></td>
+           {% elif "finished" in status %}
+             <td style="background-color:green;"></td>
+             <td style="background-color:green;"></td>
+           {% elif "error" in status %}
+             <td style="background-color:green;"></td>
+             <td style="background-color:red;"></td>
+           {% elif status == "" %}
+             <td></td>
+             <td></td>
+           {% endif %}
+           {% endfor %}  
+           <td> HH:MM:SS </td> 
+         </tr>
+       {% endfor %}
+{% else %}
+      <p> No Status data  to Display </p>
+{% endif %}
+

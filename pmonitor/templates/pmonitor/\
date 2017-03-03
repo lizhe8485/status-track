@@ -1,0 +1,253 @@
+{% if greeting %}
+<!DOCTYPE html>
+<html>
+    <head>
+    <title>ATP Process Monitor </title>
+    <link rel="StyleSheet" href="static/pmonitor/css/mystyles.css" type="text/css">
+<style>
+</style>
+
+<script type="text/javascript" src="static/pmonitor/js/myjavascript.js"></script>
+
+</head>
+
+
+
+<body onload="startTime()">
+   <div class="row" >
+     <div class="large-12 columns">
+        <h1 align="center"> Welcome to ATP Home</h1>
+     </div>
+     <h3 style="text-align:center;">(This webpage will display <em style="color:red;"> {{greeting}} </em> and more).</h3>
+   <hr>
+   </div>
+
+
+   <div>
+     <ul class="nav">
+       <li><a class="active" href="#home">Home</a></li>
+       <li><a href="#news">News</a></li>
+       <li><a href="#contact">Contact</a></li>
+       <li style="float:right"><a href="#about">About</a></li>
+     </ul>
+   </div>   
+
+
+<div  id="dynamicmonitor">
+  <p align="right"> <b>Current Time: </b><span id="cTime"></span></p>
+  <div>
+    <table style="width:100%;">
+     <tr>
+       <th> ID </th>
+       <th>Modules</th>
+       <th>Status ( <b style="color:red">0-error</b>, 1-normal, 2-warning)</th>
+       <th>State</th>
+       <th>Process</th>
+       <th>Timestamp</th>
+     </tr>
+{% if status_list %}
+    {% for status in status_list%}
+      <tr>
+        <td><a href="{% url 'detail' status.id %}">{{ status.id }}</a></li>
+        <td> {{status.component}} </td>
+        {% if status.statusCode == 0 %}
+           <td style="color:red"> {{status.statusCode}}</td>
+        {% else %}
+            <td> {{status.statusCode}}</td>
+        {% endif %}
+        <td> {{status.comment}} </td>
+        <td> Nothing yet </td>
+        <td> {{status.created_on}} </td>
+      </tr>
+    {% endfor %}
+{% else %}
+    <p> Nothing to Display </p>
+{% endif %}
+    </table>
+  </div>
+  <br>
+  <input type="button" onclick="alert('Retrieved new status')" value="Refresh Table!"> <br>
+<hr>
+</div>
+
+<p> Click on the Tab below for more details</p>
+
+<ul class="tab">
+      <li><a href="javascript:void(0)" class="tablinks" onclick="openMonitor(event, 'monitor0')"><big>Pmonitor</big></a></li>
+      <li><a href="javascript:void(0)" class="tablinks" onclick="openMonitor(event, 'myinput')"><big>Machine Learning</big></a></li>
+      <li><a href="javascript:void(0)" class="tablinks" onclick="openMonitor(event, 'myselect')"><big>To Add</big></a></li>
+      <li><a href="javascript:void(0)" class="tablinks" onclick="openMonitor(event, 'myoption')"><big>To Add</big></a></li>
+
+</ul>
+
+<div  id="monitor0" class="tabcontent">
+    <table style="width:100%;">
+     <tr>
+       <th><b> ID </b></th>
+       <th><b>Process</b></th>
+       <th><b>Status ( <b style="color:red">0-error</b>, 1-normal, 2-warning)</b></th>
+       <th><b>Detail</b></th>
+     </tr>
+     <tr>
+       <td> 1 </td>
+       <td> mAMP </th>
+       <td> 0 </td>
+       <td> <a href="#">Link to More</a><td>
+     </tr>
+     <tr>
+       <td><b> 2 </b></td>
+       <td><b>Acquisition</b></td>
+       <td><b>1</b></td>
+       <td> <a href="#">Link to More</a><td>
+     </tr>
+     <tr>
+       <td><b> 3 </b></td>
+       <td><b>FileMover</b></td>
+       <td><b>2</b></td>
+       <td> <a href="#">Link to More</a><td>
+     </tr>
+     <tr>
+       <td><b> 4 </b></td>
+       <td><b>Preprocess</b></td>
+       <td><b>0</b></td>
+       <td> <a href="#">Link to More</a><td>
+     </tr>
+     <tr>
+       <td><b> 5 </b></td>
+       <td><b>Data Analysis</b></td>
+       <td><b>0</b></td>
+       <td> <a href="#">Link to More</a><td>
+     </tr>
+     <tr>
+       <td><b> 6 </b></td>
+       <td><b>Report Reader</b></td>
+       <td><b>0</b></td>
+       <td> <a href="#">Link to More</a><td>
+     </tr>
+     <tr>
+       <td><b> 7 </b></td>
+       <td><b>CVS Geneartion</b></td>
+       <td><b>0</b></td>
+       <td> <a href="#">Link to More</a><td>
+     </tr>
+     <tr>
+       <td><b> 8 </b></td>
+       <td><b>Post Process</b></td>
+       <td><b>0</b></td>
+       <td> <a href="#">Link to More</a><td>
+     </tr>
+     <tr>
+       <td><b>  </b></td>
+       <td><b></b></td>
+       <td><b>0</b></td>
+       <td> <a href="#">Link to More</a><td>
+     </tr>
+     <tr>
+       <td><b>  </b></td>
+       <td><b></b></td>
+       <td><b>0</b></td>
+       <td> <a href="#">Link to More</a><td>
+     </tr>
+
+    </table>
+   <br>
+   <input type="button" onclick="alert('Retrieved new status')" value="Refresh Table!"> <br>
+</div>
+
+<div id="myinput" class="tabcontent">
+  <form name="methodform" action="{% url 'predict' %}" method="get">
+   <fieldset style="width: 30%">
+    <legend> Physicalchemical Properties </legend>
+    Boiling Point(K):<br>
+    <input type="text" id="bp" name="bp" value="100.0 K" autofocus> <br>
+    LogP:<br>
+    <input type="text" id="logp" name="logp" value="-0.382"><br>
+    LogD3:<br>
+    <input type="text" id="logd3" name="logd3" value="-0.382"><br>
+    LogD7:<br>
+    <input type="text" id="logd3" name="logd7" value="-0.382"><br>
+    LogD9:<br>
+    <input type="text" id="logd3" name="logd9" value="-0.382"><br>
+    LogS3:<br>
+    <input type="text" id="logs3" name="logs3" value="0.798"><br>
+    LogS7:<br>
+    <input type="text" id="logs7" name="logs7" value="0.798"><br>
+    LogS9:<br>
+    <input type="text" id="logs9" name="logs9" value="0.798"><br>
+    AgSol3:<br>
+    <input type="text" id="agsol3" name="agsol3" value="1"><br>
+    AgSol7:<br>
+    <input type="text" id="agsol7" name="agsol7" value="1"><br>
+    AgSol9:<br>
+    <input type="text" id="agsol9" name="agsol9" value="1"><br>
+    Molecular Polarity:<br>
+    <input type="text" id="molp" name="molp" value="4.496"><br>
+    pKa Basic:<br>
+    <input type="text" id="pkab" name="pkab" value="3.56"><br>
+    pKa Acidic:<br>
+    <input type="text" id="pkaa" name="pkaa" value="15.00"><br>
+    additional feature:<br>
+    <input type="text" id="afeature" name="afeature" value="78"><br>
+    <br>
+   </fieldset>
+    <input type="submit" value="Predict">
+    <input type="reset">
+    <br>
+    <input type="button" onclick="alert('Thanks for poking me!')" value="Click Me!">
+  </form>
+</div>
+
+<div id="myselect" class="tabcontent">
+  <form name="ionform">
+    <br>
+    <h2 style="color:green;">Select the Method</h2>
+    <input type="radio" name="hilic" value="hilic" checked> HILIC<br>
+    <input type="radio" name="rp" value="rp"> REVERSED PHASE<br>
+    <input type="radio" name="hydrop" value="hydrop">HYDROPHOBIC<br>
+    <input type="radio" name="gcpos" value="gcpos">GC POSITIVE<br>
+    <input type="radio" name="gcneg" value="gcneg">GC NEGATIVE<br>
+    <br>
+    <input type="checkbox" name="positive" value="positive"> POSITVE ION <br>
+    <input type="checkbox" name="negative" value="negative"> NEGATIVE ION <br> 
+    <br>
+    <input type="submit" value="Submit">
+    <input type="reset">
+    <br>
+    <input type="button" onclick="alert('Thanks for poking me!')" value="Click Me!">
+  </form>
+  <br>
+</div>
+
+<div id="myoption" class="tabcontent">
+  <form name="myselection">
+    <select name="samples">
+      <option value="sample1" selected>Sample 1</option>
+      <option value="sample2">Sample 2</option>
+      <option value="sample3">Sample 3</option>
+      <option value="sample4">Sample 4</option>
+    </select> <br>
+    <br>
+    <input type="submit" value="Submit">
+    <input type="reset">
+    <br>
+    <input type="button" onclick="alert('Thanks for poking me!')" value="Click Me!">
+  </form>
+</div>
+<br>
+<hr>
+
+<div id="textinput" >
+  <p> Submit what else you would like us to know!</p>
+  <textarea name="message" rows="10" cols="30">
+  Please input other information you would like us to know in this text box.
+  </textarea>
+  <br>
+  <input type="button" onclick="alert('Content Submitted!')" value="Submit!">
+</div>
+
+
+</body>
+</html>
+{% else %}
+   <p> Nothing to Dispay</p>
+{% endif %}

@@ -1,0 +1,18 @@
+{% extends 'pmonitor/base.html' %}
+
+{% block content %}
+
+  {% if isvalidform %}
+    <div>
+      <h1> Predicted Method from Machine Learning Model: </h1>
+      <h2 style="color: red;"><b> {{ method }} <b></h2>
+      <br>
+      <h3><strong> You have submitted the following values in the form </strong></h3>
+          {{ form.as_p }}
+    </div>
+
+  {% else %}
+     <p> Sorry, not able to predict a method from the imput at this moment</p>
+  {% endif %}
+
+{% endblock %}
